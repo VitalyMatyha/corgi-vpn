@@ -453,21 +453,21 @@
   <!-- Users -->
   <div class="section-label">Пользователи</div>
   <div class="users">
-    <div class="user-card active">
+    <div class="user-card active" id="card-me">
       <div class="avatar me">👤</div>
       <div class="user-info">
         <div class="user-name">Я</div>
-        <div class="user-meta">Подключён · 2.3 ГБ сегодня</div>
+        <div class="user-meta" id="meta-me">Загрузка...</div>
       </div>
-      <div class="badge badge-on">онлайн</div>
+      <div class="badge badge-off" id="badge-me">—</div>
     </div>
-    <div class="user-card">
+    <div class="user-card" id="card-wife">
       <div class="avatar wife">👩</div>
       <div class="user-info">
         <div class="user-name">Жена</div>
-        <div class="user-meta">Не подключена</div>
+        <div class="user-meta" id="meta-wife">Загрузка...</div>
       </div>
-      <div class="badge badge-off">офлайн</div>
+      <div class="badge badge-off" id="badge-wife">—</div>
     </div>
   </div>
 
@@ -491,20 +491,20 @@
   <div class="section-label">Статистика</div>
   <div class="stats">
     <div class="stat-card">
-      <div class="stat-label">Трафик сегодня</div>
-      <div class="stat-value">4.7 <span>ГБ</span></div>
+      <div class="stat-label">Трафик всего</div>
+      <div class="stat-value" id="stat-total">— <span>ГБ</span></div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Дней работает</div>
-      <div class="stat-value">12 <span>дн</span></div>
+      <div class="stat-label">Я скачал</div>
+      <div class="stat-value" id="stat-me">— <span>МБ</span></div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Скорость ↓</div>
-      <div class="stat-value">87 <span>Мб/с</span></div>
+      <div class="stat-label">Жена скачала</div>
+      <div class="stat-value" id="stat-wife">— <span>МБ</span></div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Скорость ↑</div>
-      <div class="stat-value">41 <span>Мб/с</span></div>
+      <div class="stat-label">Обновлено</div>
+      <div class="stat-value" id="stat-time" style="font-size:14px;">—</div>
     </div>
   </div>
 
@@ -583,21 +583,21 @@
   <div id="page-family" class="page">
     <div class="section-label" style="margin-top:8px">Участники семьи</div>
     <div class="users">
-      <div class="user-card active">
+      <div class="user-card active" id="card-me-f">
         <div class="avatar me">👤</div>
         <div class="user-info">
           <div class="user-name">Я</div>
-          <div class="user-meta">Подключён · 2.3 ГБ сегодня</div>
+          <div class="user-meta" id="meta-me-f">Загрузка...</div>
         </div>
-        <div class="badge badge-on">онлайн</div>
+        <div class="badge badge-off" id="badge-me-f">—</div>
       </div>
-      <div class="user-card">
+      <div class="user-card" id="card-wife-f">
         <div class="avatar wife">👩</div>
         <div class="user-info">
           <div class="user-name">Жена</div>
-          <div class="user-meta">Не подключена · 1.1 ГБ вчера</div>
+          <div class="user-meta" id="meta-wife-f">Загрузка...</div>
         </div>
-        <div class="badge badge-off">офлайн</div>
+        <div class="badge badge-off" id="badge-wife-f">—</div>
       </div>
     </div>
 
@@ -745,6 +745,63 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
+const API = 'https://109.120.184.4:8443';
+
+function fmt(bytes) {
+  if (bytes > 1073741824) return (bytes/1073741824).toFixed(1) + ' ГБ';
+  return (bytes/1048576).toFixed(0) + ' МБ';
+}
+
+async function fetchStats() {
+  try {
+    const r = await fetch(API);
+    const d = await r.json();
+    const total = (d.total_up + d.total_down);
+
+    // Update stat cards
+    document.getElementById('stat-total').innerHTML = fmt(total) ;
+    const now = new Date();
+    document.getElementById('stat-time').textContent = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+
+    d.clients.forEach(c => {
+      const down = fmt(c.down);
+      const up = fmt(c.up);
+      const online = c.enable;
+      const badgeClass = online ? 'badge badge-on' : 'badge badge-off';
+      const badgeText = online ? 'онлайн' : 'офлайн';
+      const meta = `↓ ${down} · ↑ ${up}`;
+
+      if (c.email === 'me') {
+        document.getElementById('meta-me').textContent = meta;
+        document.getElementById('badge-me').textContent = badgeText;
+        document.getElementById('badge-me').className = badgeClass;
+        const mf = document.getElementById('meta-me-f');
+        const bf = document.getElementById('badge-me-f');
+        if (mf) mf.textContent = meta;
+        if (bf) { bf.textContent = badgeText; bf.className = badgeClass; }
+        // stat card
+        document.getElementById('stat-me').innerHTML = fmt(c.down);
+      }
+      if (c.email === 'wife') {
+        document.getElementById('meta-wife').textContent = meta;
+        document.getElementById('badge-wife').textContent = badgeText;
+        document.getElementById('badge-wife').className = badgeClass;
+        const mf = document.getElementById('meta-wife-f');
+        const bf = document.getElementById('badge-wife-f');
+        if (mf) mf.textContent = meta;
+        if (bf) { bf.textContent = badgeText; bf.className = badgeClass; }
+        document.getElementById('stat-wife').innerHTML = fmt(c.down);
+      }
+    });
+  } catch(e) {
+    console.log('API error:', e);
+  }
+}
+
+// Fetch on load and every 30 seconds
+fetchStats();
+setInterval(fetchStats, 30000);
+
 const CONFIGS = {
   me:   'vless://745c2580-ec27-4064-b6f2-a8233b41f241@109.120.184.4:443?type=tcp&encryption=none&security=reality&pbk=lJiIQNndALVQa9sUGcQ03t7-NqXGMa5qEIYCcFVarzE&fp=chrome&sni=www.icloud.com&sid=52ebc059ce&spx=%2F&flow=xtls-rprx-vision#CorgiVPN-me',
   wife: 'vless://0d4892d0-5155-4078-be1c-4d516bf7eec3@109.120.184.4:443?type=tcp&encryption=none&security=reality&pbk=lJiIQNndALVQa9sUGcQ03t7-NqXGMa5qEIYCcFVarzE&fp=chrome&sni=www.icloud.com&sid=52ebc059ce&spx=%2F&flow=xtls-rprx-vision#CorgiVPN-wife'
