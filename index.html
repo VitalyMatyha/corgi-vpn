@@ -622,20 +622,20 @@
     <div class="section-label" style="margin-top:8px">Статистика трафика</div>
     <div class="stats" style="margin-top:0">
       <div class="stat-card">
-        <div class="stat-label">Сегодня</div>
-        <div class="stat-value">4.7 <span>ГБ</span></div>
+        <div class="stat-label">Всего скачано</div>
+        <div class="stat-value" id="t-total-down">—</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">За месяц</div>
-        <div class="stat-value">38 <span>ГБ</span></div>
+        <div class="stat-label">Всего отправлено</div>
+        <div class="stat-value" id="t-total-up">—</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Скорость ↓</div>
-        <div class="stat-value">87 <span>Мб/с</span></div>
+        <div class="stat-label">Я скачал</div>
+        <div class="stat-value" id="t-me-down">—</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Скорость ↑</div>
-        <div class="stat-value">41 <span>Мб/с</span></div>
+        <div class="stat-label">Жена скачала</div>
+        <div class="stat-value" id="t-wife-down">—</div>
       </div>
     </div>
 
@@ -645,21 +645,22 @@
         <div class="avatar me">👤</div>
         <div class="user-info">
           <div class="user-name">Я</div>
-          <div class="user-meta">Сегодня · 2.3 ГБ &nbsp;|&nbsp; Месяц · 22 ГБ</div>
+          <div class="user-meta" id="t-me-meta">Загрузка...</div>
         </div>
       </div>
       <div class="user-card">
         <div class="avatar wife">👩</div>
         <div class="user-info">
           <div class="user-name">Жена</div>
-          <div class="user-meta">Сегодня · 2.4 ГБ &nbsp;|&nbsp; Месяц · 16 ГБ</div>
+          <div class="user-meta" id="t-wife-meta">Загрузка...</div>
         </div>
       </div>
     </div>
 
-    <div class="section-label">Последние 7 дней</div>
-    <div style="margin: 0 16px 24px; background: white; border: 1.5px solid var(--border); border-radius: 20px; padding: 20px; box-shadow: 0 1px 8px rgba(0,0,0,0.04);">
-      <canvas id="trafficChart" height="140"></canvas>
+    <div class="section-label">Обновлено</div>
+    <div style="margin: 0 16px 24px; background: white; border: 1.5px solid var(--border); border-radius: 20px; padding: 20px; box-shadow: 0 1px 8px rgba(0,0,0,0.04); text-align:center;">
+      <div style="font-family:'DM Mono',monospace; font-size:13px; color:var(--muted);">Данные обновляются каждые 30 сек</div>
+      <div style="font-family:'DM Mono',monospace; font-size:20px; color:var(--text); margin-top:8px;" id="t-updated">—</div>
     </div>
   </div><!-- end page-traffic -->
 
@@ -676,46 +677,46 @@
           <div class="badge badge-on">активен</div>
         </div>
         <div style="display:flex; gap:8px; width:100%;">
-          <div class="chip" style="flex:1; text-align:center;">Пинг: 12 мс</div>
-          <div class="chip" style="flex:1; text-align:center;">Uptime: 99.9%</div>
-          <div class="chip" style="flex:1; text-align:center;">12 дн</div>
+          <div class="chip" style="flex:1; text-align:center;">443 порт</div>
+          <div class="chip" style="flex:1; text-align:center;">uTLS: chrome</div>
+          <div class="chip" style="flex:1; text-align:center;">SNI: icloud</div>
         </div>
       </div>
     </div>
 
     <div class="section-label">Приложения</div>
     <div style="margin: 0 16px 16px; display:flex; flex-direction:column; gap:10px;">
-      <div class="user-card" style="justify-content:space-between;">
+      <div class="user-card" style="justify-content:space-between; cursor:pointer;" onclick="window.open('https://apps.apple.com/search?term=happyness+plus','_blank')">
         <div>
           <div class="user-name" style="font-size:14px;">📱 HappPlus — iPhone</div>
           <div class="user-meta">App Store · бесплатно</div>
         </div>
-        <div class="badge badge-off">скачать</div>
+        <div class="badge" style="background:var(--accent-light);color:var(--accent);border:1px solid rgba(232,99,42,0.2);">открыть →</div>
       </div>
-      <div class="user-card" style="justify-content:space-between;">
+      <div class="user-card" style="justify-content:space-between; cursor:pointer;" onclick="window.open('https://hiddify.com/app/','_blank')">
         <div>
           <div class="user-name" style="font-size:14px;">💻 Hiddify — macOS</div>
           <div class="user-meta">hiddify.com · бесплатно</div>
         </div>
-        <div class="badge badge-off">скачать</div>
+        <div class="badge" style="background:var(--accent-light);color:var(--accent);border:1px solid rgba(232,99,42,0.2);">открыть →</div>
       </div>
-      <div class="user-card" style="justify-content:space-between;">
+      <div class="user-card" style="justify-content:space-between; cursor:pointer;" onclick="window.open('https://hiddify.com/app/','_blank')">
         <div>
           <div class="user-name" style="font-size:14px;">🖥 Hiddify — Windows</div>
           <div class="user-meta">hiddify.com · бесплатно</div>
         </div>
-        <div class="badge badge-off">скачать</div>
+        <div class="badge" style="background:var(--accent-light);color:var(--accent);border:1px solid rgba(232,99,42,0.2);">открыть →</div>
       </div>
     </div>
 
     <div class="section-label">Панель управления</div>
     <div style="margin: 0 16px 24px;">
-      <div class="user-card" style="justify-content:space-between;">
+      <div class="user-card" style="justify-content:space-between; cursor:pointer;" onclick="window.open('https://109.120.184.4:2053/e1AnhBg3xXIKl88MKP','_blank')">
         <div>
           <div class="user-name" style="font-size:14px;">🔧 3x-ui панель</div>
-          <div class="user-meta">https://109.120.184.4:2053/e1AnhBg3xXIKl88MKP</div>
+          <div class="user-meta" style="font-size:10px;">109.120.184.4:2053</div>
         </div>
-        <div class="badge" style="background:var(--accent-light); color:var(--accent); border:1px solid rgba(232,99,42,0.2);">відкрити →
+        <div class="badge" style="background:var(--accent-light);color:var(--accent);border:1px solid rgba(232,99,42,0.2);">открыть →</div>
       </div>
     </div>
   </div><!-- end page-settings -->
@@ -745,7 +746,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-const API = 'https://109.120.184.4:8443';
+const API = 'https://corsproxy.io/?url=http://109.120.184.4:8080';
 
 function fmt(bytes) {
   if (bytes > 1073741824) return (bytes/1073741824).toFixed(1) + ' ГБ';
@@ -756,41 +757,48 @@ async function fetchStats() {
   try {
     const r = await fetch(API);
     const d = await r.json();
-    const total = (d.total_up + d.total_down);
+    const totalDown = d.total_down;
+    const totalUp = d.total_up;
 
-    // Update stat cards
-    document.getElementById('stat-total').innerHTML = fmt(total) ;
+    // Update home stat cards
+    const el = document.getElementById('stat-total');
+    if (el) el.innerHTML = fmt(totalDown + totalUp);
     const now = new Date();
-    document.getElementById('stat-time').textContent = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    const timeStr = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    const st = document.getElementById('stat-time');
+    if (st) st.textContent = timeStr;
+
+    // Update traffic page
+    const ttd = document.getElementById('t-total-down');
+    const ttu = document.getElementById('t-total-up');
+    const tu = document.getElementById('t-updated');
+    if (ttd) ttd.innerHTML = fmt(totalDown);
+    if (ttu) ttu.innerHTML = fmt(totalUp);
+    if (tu) tu.textContent = timeStr;
 
     d.clients.forEach(c => {
       const down = fmt(c.down);
       const up = fmt(c.up);
-      const online = c.enable;
+      // Online = has traffic (more than 1MB uploaded recently means active)
+      const hasTraffic = c.up > 0 || c.down > 0;
+      const online = c.enable && hasTraffic;
       const badgeClass = online ? 'badge badge-on' : 'badge badge-off';
       const badgeText = online ? 'онлайн' : 'офлайн';
       const meta = `↓ ${down} · ↑ ${up}`;
 
       if (c.email === 'me') {
-        document.getElementById('meta-me').textContent = meta;
-        document.getElementById('badge-me').textContent = badgeText;
-        document.getElementById('badge-me').className = badgeClass;
-        const mf = document.getElementById('meta-me-f');
-        const bf = document.getElementById('badge-me-f');
-        if (mf) mf.textContent = meta;
-        if (bf) { bf.textContent = badgeText; bf.className = badgeClass; }
-        // stat card
-        document.getElementById('stat-me').innerHTML = fmt(c.down);
+        ['meta-me','meta-me-f'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = meta; });
+        ['badge-me','badge-me-f'].forEach(id => { const e = document.getElementById(id); if(e) { e.textContent = badgeText; e.className = badgeClass; }});
+        const sm = document.getElementById('stat-me'); if(sm) sm.innerHTML = fmt(c.down);
+        const tm = document.getElementById('t-me-down'); if(tm) tm.innerHTML = fmt(c.down);
+        const tmm = document.getElementById('t-me-meta'); if(tmm) tmm.textContent = `↓ ${down} · ↑ ${up}`;
       }
       if (c.email === 'wife') {
-        document.getElementById('meta-wife').textContent = meta;
-        document.getElementById('badge-wife').textContent = badgeText;
-        document.getElementById('badge-wife').className = badgeClass;
-        const mf = document.getElementById('meta-wife-f');
-        const bf = document.getElementById('badge-wife-f');
-        if (mf) mf.textContent = meta;
-        if (bf) { bf.textContent = badgeText; bf.className = badgeClass; }
-        document.getElementById('stat-wife').innerHTML = fmt(c.down);
+        ['meta-wife','meta-wife-f'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = meta; });
+        ['badge-wife','badge-wife-f'].forEach(id => { const e = document.getElementById(id); if(e) { e.textContent = badgeText; e.className = badgeClass; }});
+        const sw = document.getElementById('stat-wife'); if(sw) sw.innerHTML = fmt(c.down);
+        const tw = document.getElementById('t-wife-down'); if(tw) tw.innerHTML = fmt(c.down);
+        const twm = document.getElementById('t-wife-meta'); if(twm) twm.textContent = `↓ ${down} · ↑ ${up}`;
       }
     });
   } catch(e) {
@@ -849,53 +857,6 @@ function showPage(page) {
   if (page === 'family') {
     setTimeout(() => makeQR('qrCanvas2', currentTab), 50);
   }
-  if (page === 'traffic') {
-    setTimeout(drawTrafficChart, 50);
-  }
-}
-
-function drawTrafficChart() {
-  const canvas = document.getElementById('trafficChart');
-  if (!canvas) return;
-  canvas._drawn = false; // allow redraw each time
-  const ctx = canvas.getContext('2d');
-  const days = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-  const data = [3.2, 5.1, 2.8, 6.4, 4.7, 7.2, 4.7];
-  const W = canvas.offsetWidth || 340;
-  canvas.width = W;
-  const H = 140;
-  const pad = { top: 10, right: 10, bottom: 30, left: 36 };
-  const max = Math.max(...data) * 1.2;
-  const bw = (W - pad.left - pad.right) / days.length;
-
-  ctx.clearRect(0, 0, W, H);
-  ctx.font = '11px DM Mono, monospace';
-  ctx.fillStyle = 'rgba(26,18,8,0.35)';
-  ctx.textAlign = 'right';
-  [0, Math.round(max/2), Math.round(max)].forEach(v => {
-    const y = pad.top + (H - pad.top - pad.bottom) * (1 - v / max);
-    ctx.fillText(v + ' ГБ', pad.left - 6, y + 4);
-    ctx.strokeStyle = 'rgba(0,0,0,0.06)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
-  });
-
-  data.forEach((val, i) => {
-    const x = pad.left + i * bw + bw * 0.15;
-    const bWidth = bw * 0.7;
-    const bHeight = (val / max) * (H - pad.top - pad.bottom);
-    const y = H - pad.bottom - bHeight;
-    const grad = ctx.createLinearGradient(0, y, 0, H - pad.bottom);
-    grad.addColorStop(0, 'rgba(232,99,42,0.85)');
-    grad.addColorStop(1, 'rgba(245,166,35,0.4)');
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.roundRect(x, y, bWidth, bHeight, 5);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(26,18,8,0.45)';
-    ctx.textAlign = 'center';
-    ctx.fillText(days[i], x + bWidth / 2, H - 8);
-  });
 }
 
 function setDevice(el, device) {
@@ -921,3 +882,4 @@ function copyConfig2() {
 </script>
 </body>
 </html>
+
