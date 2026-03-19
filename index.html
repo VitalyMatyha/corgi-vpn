@@ -746,7 +746,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-const API = 'https://corsproxy.io/?url=http://109.120.184.4:8080';
+const API = 'https://api.allorigins.win/get?url=' + encodeURIComponent('http://109.120.184.4:8080');
 
 function fmt(bytes) {
   bytes = Number(bytes) || 0;
@@ -758,10 +758,9 @@ function fmt(bytes) {
 async function fetchStats() {
   try {
     const r = await fetch(API);
-    let d = await r.json();
-    // corsproxy sometimes wraps response
-    if (d.contents) d = JSON.parse(d.contents);
-    if (d.body) d = JSON.parse(d.body);
+    const wrapper = await r.json();
+    // allorigins wraps response in {contents: "..."}
+    const d = JSON.parse(wrapper.contents);
 
     const totalDown = Number(d.total_down) || 0;
     const totalUp = Number(d.total_up) || 0;
