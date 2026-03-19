@@ -749,16 +749,22 @@
 const API = 'https://corsproxy.io/?url=http://109.120.184.4:8080';
 
 function fmt(bytes) {
+  bytes = Number(bytes) || 0;
   if (bytes > 1073741824) return (bytes/1073741824).toFixed(1) + ' ГБ';
-  return (bytes/1048576).toFixed(0) + ' МБ';
+  if (bytes > 1048576) return (bytes/1048576).toFixed(0) + ' МБ';
+  return (bytes/1024).toFixed(0) + ' КБ';
 }
 
 async function fetchStats() {
   try {
     const r = await fetch(API);
-    const d = await r.json();
-    const totalDown = d.total_down;
-    const totalUp = d.total_up;
+    let d = await r.json();
+    // corsproxy sometimes wraps response
+    if (d.contents) d = JSON.parse(d.contents);
+    if (d.body) d = JSON.parse(d.body);
+
+    const totalDown = Number(d.total_down) || 0;
+    const totalUp = Number(d.total_up) || 0;
 
     // Update home stat cards
     const el = document.getElementById('stat-total');
@@ -777,10 +783,9 @@ async function fetchStats() {
     if (tu) tu.textContent = timeStr;
 
     d.clients.forEach(c => {
-      const down = fmt(c.down);
-      const up = fmt(c.up);
-      // Online = has traffic (more than 1MB uploaded recently means active)
-      const hasTraffic = c.up > 0 || c.down > 0;
+      const down = fmt(Number(c.down) || 0);
+      const up = fmt(Number(c.up) || 0);
+      const hasTraffic = (Number(c.up)||0) > 0 || (Number(c.down)||0) > 0;
       const online = c.enable && hasTraffic;
       const badgeClass = online ? 'badge badge-on' : 'badge badge-off';
       const badgeText = online ? 'онлайн' : 'офлайн';
@@ -789,15 +794,15 @@ async function fetchStats() {
       if (c.email === 'me') {
         ['meta-me','meta-me-f'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = meta; });
         ['badge-me','badge-me-f'].forEach(id => { const e = document.getElementById(id); if(e) { e.textContent = badgeText; e.className = badgeClass; }});
-        const sm = document.getElementById('stat-me'); if(sm) sm.innerHTML = fmt(c.down);
-        const tm = document.getElementById('t-me-down'); if(tm) tm.innerHTML = fmt(c.down);
+        const sm = document.getElementById('stat-me'); if(sm) sm.innerHTML = fmt(Number(c.down)||0);
+        const tm = document.getElementById('t-me-down'); if(tm) tm.innerHTML = fmt(Number(c.down)||0);
         const tmm = document.getElementById('t-me-meta'); if(tmm) tmm.textContent = `↓ ${down} · ↑ ${up}`;
       }
       if (c.email === 'wife') {
         ['meta-wife','meta-wife-f'].forEach(id => { const e = document.getElementById(id); if(e) e.textContent = meta; });
         ['badge-wife','badge-wife-f'].forEach(id => { const e = document.getElementById(id); if(e) { e.textContent = badgeText; e.className = badgeClass; }});
-        const sw = document.getElementById('stat-wife'); if(sw) sw.innerHTML = fmt(c.down);
-        const tw = document.getElementById('t-wife-down'); if(tw) tw.innerHTML = fmt(c.down);
+        const sw = document.getElementById('stat-wife'); if(sw) sw.innerHTML = fmt(Number(c.down)||0);
+        const tw = document.getElementById('t-wife-down'); if(tw) tw.innerHTML = fmt(Number(c.down)||0);
         const twm = document.getElementById('t-wife-meta'); if(twm) twm.textContent = `↓ ${down} · ↑ ${up}`;
       }
     });
